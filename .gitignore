@@ -30,11 +30,11 @@ build/
 !**/src/test/**/build/
 
 ### VS Code ###
-.vscode/
+/src/js/.vscode
 
-/node_modules
-/.pnp
-.pnp.js
+/src/js/node_modules
+/src/js/.pnp
+/src/js/.pnp.js
 
 # testing
 /coverage
