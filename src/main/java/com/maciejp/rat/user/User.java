@@ -17,16 +17,20 @@ public class User {
 
     private Timestamp registerDate;
 
+    private String phoneNumber;
+
     public User(
             @JsonProperty(value = "id", access = JsonProperty.Access.READ_ONLY) long id,
             @JsonProperty("username") String username,
             @JsonProperty("email") String email,
             @JsonProperty("password") String password,
+            @JsonProperty("phoneNumber") String phoneNumber,
             @JsonProperty(value = "registerDate", access = JsonProperty.Access.READ_ONLY) Timestamp registerDate) {
         this.id = id;
         this.username = username;
         this.email = email;
         this.password = password;
+        this.phoneNumber = phoneNumber;
         this.registerDate = registerDate;
     }
 
@@ -59,6 +63,14 @@ public class User {
         this.password = password;
     }
 
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+
     public Timestamp getRegisterDate() {
         return registerDate;
     }
@@ -75,6 +87,7 @@ public class User {
                 ", email='" + email + '\'' +
                 ", password='" + password + '\'' +
                 ", registerDate=" + registerDate +
+                ", phoneNumber='" + phoneNumber + '\'' +
                 '}';
     }
 }

@@ -23,7 +23,7 @@ public class UserDao {
 
     public User selectUserById(long id) {
         String sql = "" +
-                "SELECT user_id, username, email, password, register_date " +
+                "SELECT user_id, username, email, password, phone_number, register_date " +
                 "FROM user_profile " +
                 "WHERE user_id = ?";
 
@@ -43,7 +43,7 @@ public class UserDao {
 
     public User selectUserByUsername(String username) {
         String sql = "" +
-                "SELECT user_id, username, email, password, register_date " +
+                "SELECT user_id, username, email, password, phone_number, register_date " +
                 "FROM user_profile " +
                 "WHERE username = ?";
 
@@ -110,9 +110,11 @@ public class UserDao {
                 "username, " +
                 "email, " +
                 "password, " +
+                "phone_number, " +
                 "register_date) " +
                 "VALUES (" +
                 "DEFAULT, " +
+                "?, " +
                 "?, " +
                 "?, " +
                 "?, " +
@@ -126,6 +128,7 @@ public class UserDao {
                 statement.setString(1, user.getUsername());
                 statement.setString(2, user.getEmail());
                 statement.setString(3, user.getPassword());
+                statement.setString(4, user.getPhoneNumber());
                 return statement;
             }
         }, keyHolder);
@@ -140,6 +143,7 @@ public class UserDao {
             String username = resultSet.getString("username");
             String email = resultSet.getString("email");
             String password = resultSet.getString("password");
+            String phoneNumber = resultSet.getString("phone_number");
             Timestamp registerDate = resultSet.getTimestamp("register_date");
 
             return new User(
@@ -147,6 +151,7 @@ public class UserDao {
                     username,
                     email,
                     password,
+                    phoneNumber,
                     registerDate
             );
         });

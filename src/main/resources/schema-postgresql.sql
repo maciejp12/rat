@@ -6,6 +6,7 @@ CREATE TABLE user_profile (
     username varchar(100) UNIQUE NOT NULL,
     email varchar(100) UNIQUE NOT NULL,
     password varchar(100) NOT NULL,
+    phone_number varchar(12),
     register_date timestamp NOT NULL
 );
 
