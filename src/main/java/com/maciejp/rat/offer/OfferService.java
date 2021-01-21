@@ -33,12 +33,12 @@ public class OfferService {
         return offerDao.selectOfferById(id);
     }
 
-    public List<Offer> getOfferByCreator(long id) throws OfferSelectionException {
-        if (!userService.userIdExists(id)) {
+    public List<Offer> getOfferByCreator(String username) throws OfferSelectionException {
+        if (!userService.usernameExists(username)) {
             throw new OfferSelectionException("User does not exists", HttpStatus.BAD_REQUEST);
         }
 
-        return offerDao.selectOfferByCreator(id);
+        return offerDao.selectOfferByCreator(username);
     }
 
     public long addOffer(Offer offer, String creatorUsername) throws OfferCreationException {

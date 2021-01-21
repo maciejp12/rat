@@ -5,6 +5,7 @@ import RegisterForm from './component/RegisterForm';
 import LoginForm from './component/LoginForm';
 import OfferList from './component/OfferList';
 import OfferView from './component/OfferView';
+import UserView from './component/UserView';
 import { BrowserRouter as Router, Link, Route } from 'react-router-dom';
 import './App.css';
 
@@ -32,6 +33,9 @@ class App extends Component {
           });
         })
         .catch(error => {
+          this.setState({
+            loggedIn: false
+          })
           this.handleLogout();
         });
     }
@@ -201,6 +205,8 @@ class App extends Component {
 
           <Route exact path="/offer/:id" component={OfferView} />
         
+          <Route exact path="/user/:username" component={UserView} />
+
         </div>
       </Router>
     );

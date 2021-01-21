@@ -49,16 +49,16 @@ public class OfferDao {
         );
     }
 
-    public List<Offer> selectOfferByCreator(long userId) {
+    public List<Offer> selectOfferByCreator(String username) {
         String sql = "" +
                 "SELECT offer_id, title, description, price, creator, creation_date " +
-                "FROM OFFER " +
-                "WHERE creator = ? ";
+                "FROM offer JOIN user_profile ON creator = user_id " +
+                "WHERE username = ? ";
 
         return jdbcTemplate.query(
                 sql,
                 mapOffer(),
-                userId
+                username
         );
     }
 

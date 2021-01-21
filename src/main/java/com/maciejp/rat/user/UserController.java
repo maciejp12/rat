@@ -1,6 +1,7 @@
 package com.maciejp.rat.user;
 
 import com.maciejp.rat.exception.RegisterException;
+import com.maciejp.rat.exception.UserSelectionException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
@@ -37,7 +38,9 @@ public class UserController {
         try {
             id = userService.addUser(user);
         } catch (RegisterException e) {
-            return ResponseEntity.status(e.getHttpStatus()).body(e.buildResponse());
+            return ResponseEntity
+                    .status(e.getHttpStatus())
+                    .body(e.buildResponse());
         }
         User newUser = userService.getUserById(id);
         newUser.setPassword(null);
@@ -68,10 +71,31 @@ public class UserController {
         if (authentication != null) {
             if (!(authentication instanceof AnonymousAuthenticationToken) && authentication.isAuthenticated()) {
                 User user = userService.getUserByUsername(authentication.getName());
-                return ResponseEntity.ok().body(user);
+                return ResponseEntity
+                        .ok()
+                        .body(user);
             }
         }
-        return ResponseEntity.notFound().build();
+        return ResponseEntity
+                .notFound()
+                .build();
+    }
+
+    @GetMapping("/username/{username}")
+    public ResponseEntity<?> getUserByName(@PathVariable("username") String username) {
+        User user;
+
+        try {
+            user = userService.getUserByUsername(username);
+        } catch (UserSelectionException e) {
+            return ResponseEntity
+                    .status(e.getHttpStatus())
+                    .body(e.buildResponse());
+        }
+
+        return ResponseEntity
+                .ok()
+                .body(user);
     }
 
 }

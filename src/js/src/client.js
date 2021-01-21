@@ -1,4 +1,5 @@
 const offerUrl = 'http://127.0.0.1:8080/api/offer';
+const userOfferUrl = 'http://127.0.0.1:8080/api/offer/creator';
 const userUrl = 'http://127.0.0.1:8080/api/user';
 const loginUrl = 'http://127.0.0.1:8080/api/user/login';
 const authUrl = 'http://127.0.0.1:8080/api/user/auth';
@@ -6,6 +7,16 @@ const authUrl = 'http://127.0.0.1:8080/api/user/auth';
 
 export const getAllOffers = () => {
   return fetch(offerUrl, {
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json'
+    },
+    method: 'GET'
+  });
+}
+
+export const getUserOffers = (username) => {
+  return fetch(offerUrl + '/creator/' + username, {
     headers: {
       'Accept': 'application/json',
       'Content-Type': 'application/json'

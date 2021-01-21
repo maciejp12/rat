@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { getAllOffers } from '../client';
+import { getAllOffers , getUserOffers } from '../client';
 import { Link } from 'react-router-dom';
 
 import '../App.css';
@@ -9,9 +9,17 @@ class OfferList extends Component {
 
   constructor(props) {
     super(props);
+    let userOnly = false;
+    let username = this.props.username;
+    if (username != null) {
+      userOnly = true;
+    }
+    
     this.state = {
       offers: [],
-      isFetching: false
+      isFetching: false,
+      userOnly: userOnly,
+      username: username
     }
   }
 
@@ -23,20 +31,39 @@ class OfferList extends Component {
     this.setState({
       isFetching: true
     });
-    getAllOffers()
-      .then(res => res.json()
-        .then(offers => {
+
+    if (!this.state.userOnly) {
+      getAllOffers()
+        .then(res => res.json()
+          .then(offers => {
+            this.setState({
+              offers,
+              isFetching: false
+            });
+          }))
+        .catch(error => {
+          console.log(error);
           this.setState({
-            offers,
             isFetching: false
           });
-        }))
-      .catch(error => {
-        console.log(error);
-        this.setState({
-          isFetching: false
         });
-      });
+        return;
+    } else {
+      getUserOffers(this.state.username)
+        .then(res => res.json()
+          .then(offers => {
+            this.setState({
+              offers,
+              isFetching: false
+            });
+          }))
+        .catch(error => {
+          console.log(error);
+          this.setState({
+            isFetching: false
+          });
+        });
+    } 
   }
 
   render() {
@@ -71,7 +98,11 @@ class OfferList extends Component {
                                     {offer.title}
                                   </Link>
                                 </td>
-                                <td>{offer.creator}</td>
+                                <td>
+                                  <Link to={`/user/${offer.creator}`}>
+                                    {offer.creator}
+                                  </Link>
+                                </td>
                                 <td>{offer.creationDate}</td>
                                 <td>{offer.description}</td>
                                 <td>{offer.price}$</td>

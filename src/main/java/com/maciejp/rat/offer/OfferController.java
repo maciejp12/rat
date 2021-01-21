@@ -38,10 +38,10 @@ public class OfferController {
     }
 
     @GetMapping("/creator/{id}")
-    public ResponseEntity<?> getOfferByCreator(@PathVariable("id") long id) {
+    public ResponseEntity<?> getOfferByCreator(@PathVariable("id") String username) {
         List<Offer> offers;
         try {
-            offers = offerService.getOfferByCreator(id);
+            offers = offerService.getOfferByCreator(username);
         } catch (OfferSelectionException e) {
             return ResponseEntity.status(e.getHttpStatus()).body(e.buildResponse());
         }

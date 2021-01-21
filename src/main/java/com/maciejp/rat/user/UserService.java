@@ -1,6 +1,7 @@
 package com.maciejp.rat.user;
 
 import com.maciejp.rat.exception.RegisterException;
+import com.maciejp.rat.exception.UserSelectionException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -26,8 +27,14 @@ public class UserService {
         return userDao.selectUserById(id);
     }
 
-    public User getUserByUsername(String username) {
-        return userDao.selectUserByUsername(username);
+    public User getUserByUsername(String username) throws UserSelectionException {
+        User user = userDao.selectUserByUsername(username);
+
+        if (user == null) {
+            throw new UserSelectionException("User does not exist", HttpStatus.BAD_REQUEST);
+        }
+
+        return user;
     }
 
     public Boolean usernameExists(String username) {
