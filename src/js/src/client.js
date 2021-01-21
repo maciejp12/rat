@@ -52,7 +52,7 @@ export const addOffer = (data, token, type) => {
   });
 }
 
-export const registerUser = (username, email, password) => {
+export const registerUser = (username, email, phoneNumber, password) => {
   return fetch(userUrl, {
     headers: {
       'Accept': 'application/json',
@@ -62,6 +62,7 @@ export const registerUser = (username, email, password) => {
     body: JSON.stringify({
       username: username,
       email: email,
+      phoneNumber: phoneNumber,
       password: password
     }) 
   })

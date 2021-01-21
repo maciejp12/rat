@@ -7,6 +7,7 @@ class RegisterForm extends Component {
     this.state = {
       username: '',
       email: '',
+      phoneNumber: '',
       password: '',
       confirmPassword: '',
       errorMessage: ''
@@ -15,6 +16,7 @@ class RegisterForm extends Component {
     this.setErrorMessage = this.setErrorMessage.bind(this);
     this.handleUsernameChange = this.handleUsernameChange.bind(this);
     this.handleEmailChange = this.handleEmailChange.bind(this);
+    this.handlePhoneNumberChange = this.handlePhoneNumberChange.bind(this);
     this.handlePasswordChange = this.handlePasswordChange.bind(this);
     this.handleConfirmPasswordChange = this.handleConfirmPasswordChange.bind(this);
     this.validateInput = this.validateInput.bind(this);
@@ -38,6 +40,12 @@ class RegisterForm extends Component {
     });
   }
 
+  handlePhoneNumberChange(event) {
+    this.setState({
+      phoneNumber: event.target.value
+    });
+  }
+
   handlePasswordChange(event) {
     this.setState({
       password: event.target.value
@@ -54,7 +62,6 @@ class RegisterForm extends Component {
     if (!this.checkConfirmPassword()) {
       return false;
     }
-
     return true;
   }
 
@@ -79,6 +86,10 @@ class RegisterForm extends Component {
         <label>
           email 
           <input type="text" value={this.state.email} onChange={this.handleEmailChange} />
+        </label>
+        <label>
+          phone number 
+          <input type="text" value={this.state.phoneNumber} onChange={this.handlePhoneNumberChange} />
         </label>
         <label>
           password 

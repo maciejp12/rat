@@ -50,6 +50,7 @@ class App extends Component {
     registerUser(
       data.username,
       data.email,
+      data.phoneNumber,
       data.password
     )
     .then(res => {
@@ -126,11 +127,11 @@ class App extends Component {
         }
 
         res.json().then(json => {
-          console.log(json);
+          /*console.log(json);
           let offers = this.state.offers.concat(json);
           this.setState({
             offers
-          });
+          });*/
           this.offerForm.current.setErrorMessage('');
           window.location.href = '/';
         })

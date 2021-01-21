@@ -62,6 +62,10 @@ public class UserService {
             throw new RegisterException("Invalid email", HttpStatus.BAD_REQUEST);
         }
 
+        if (!userValidator.validatePhoneNumber(user.getPhoneNumber())) {
+            throw new RegisterException("Invalid phone number", HttpStatus.BAD_REQUEST);
+        }
+
         if (usernameExists(user.getUsername())) {
             throw new RegisterException("Username already in use", HttpStatus.CONFLICT);
         }

@@ -11,9 +11,6 @@ public class UserValidator {
     private final int minPasswordLength = 3;
     private final int maxPasswordLength = 100;
 
-    private final String emailRegexp = "^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@((\\[[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}" +
-            "\\.[0-9]{1,3}\\])|(([a-zA-Z\\-0-9]+\\.)+[a-zA-Z]{2,}))$";
-
     public boolean validateName(String username) {
         int len = username.length();
         return len >= minNameLength && len <= maxNameLength;
@@ -25,8 +22,17 @@ public class UserValidator {
     }
 
     public boolean validateEmail(String email) {
+        String emailRegexp = "^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@((\\[[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}" +
+                "\\.[0-9]{1,3}\\])|(([a-zA-Z\\-0-9]+\\.)+[a-zA-Z]{2,}))$";
         Pattern p = Pattern.compile(emailRegexp);
         Matcher m = p.matcher(email);
+        return m.matches();
+    }
+
+    public boolean validatePhoneNumber(String phoneNumber) {
+        String phoneNumberRegexp = "^\\d{9}$";
+        Pattern p = Pattern.compile(phoneNumberRegexp);
+        Matcher m = p.matcher(phoneNumber);
         return m.matches();
     }
 
