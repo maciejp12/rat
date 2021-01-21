@@ -1,6 +1,7 @@
 package com.maciejp.rat.offer;
 
 import com.maciejp.rat.exception.OfferCreationException;
+import com.maciejp.rat.exception.OfferSelectionException;
 import com.maciejp.rat.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -30,6 +31,14 @@ public class OfferService {
 
     public Offer getOfferById(long id) {
         return offerDao.selectOfferById(id);
+    }
+
+    public List<Offer> getOfferByCreator(long id) throws OfferSelectionException {
+        if (!userService.userIdExists(id)) {
+            throw new OfferSelectionException("User does not exists", HttpStatus.BAD_REQUEST);
+        }
+
+        return offerDao.selectOfferByCreator(id);
     }
 
     public long addOffer(Offer offer, String creatorUsername) throws OfferCreationException {

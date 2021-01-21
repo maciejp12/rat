@@ -38,6 +38,10 @@ public class UserService {
         return userDao.selectEmailExists(email);
     }
 
+    public Boolean userIdExists(long id) {
+        return userDao.selectIdExists(id);
+    }
+
     public long addUser(User user) throws RegisterException {
         if (!userValidator.validateName(user.getUsername())) {
             throw new RegisterException(userValidator.getUsernameErrorMessage(), HttpStatus.BAD_REQUEST);

@@ -1,8 +1,10 @@
 import React, { Component } from 'react';
-import { getAllOffers , registerUser, login , auth , addOffer } from './client';
+import { registerUser, login , auth , addOffer } from './client';
 import OfferForm from './component/OfferForm';
 import RegisterForm from './component/RegisterForm';
 import LoginForm from './component/LoginForm';
+import OfferList from './component/OfferList';
+import OfferView from './component/OfferView';
 import { BrowserRouter as Router, Link, Route } from 'react-router-dom';
 import './App.css';
 
@@ -13,8 +15,6 @@ class App extends Component {
     this.state = {
       loggedIn: localStorage.getItem('token') ? true : false,
       username: '',
-      isFetching: false,
-      offers: [],
     }
 
     this.loginForm = React.createRef();
@@ -36,13 +36,11 @@ class App extends Component {
         });
     }
 
-    this.loadOffers();
   }
 
   handleRegister = (e, data) => {
     e.preventDefault();
-    if (!this.registerForm.current.checkConfirmPassword()) {
-      this.registerForm.current.setErrorMessage('Passwords doesnt match');
+    if (!this.registerForm.current.validateInput()) {
       return;
     }
     registerUser(
@@ -64,6 +62,9 @@ class App extends Component {
         this.registerForm.current.setErrorMessage('');
         window.location.href = '/login';
       })
+    })
+    .catch(error => {
+      this.registerForm.current.setErrorMessage('Connection error');
     });
   }
 
@@ -86,7 +87,7 @@ class App extends Component {
           loggedIn: true,
           username: json.username
         });
-        this.loginForm.current.setErrorMessage('Invalid login or password');
+        this.loginForm.current.setErrorMessage('');
         window.location.href = '/';
       })
     });
@@ -99,26 +100,6 @@ class App extends Component {
     });
     localStorage.removeItem('token');
     localStorage.removeItem('token-type');
-  }
-
-  loadOffers = () => {
-    this.setState({
-      isFetching: true
-    });
-    getAllOffers()
-      .then(res => res.json()
-        .then(offers => {
-          this.setState({
-            offers,
-            isFetching: false
-          });
-        }))
-      .catch(error => {
-        console.log(error);
-        this.setState({
-          isFetching: false
-        });
-      });
   }
 
   handleAddOffer = (e, data) => {
@@ -154,16 +135,6 @@ class App extends Component {
   }
 
   render() {
-    
-    const { offers, isFetching } = this.state;
-
-    if (isFetching) {
-      return (
-        <div>
-          <p>loading</p>
-        </div>
-      );
-    }
 
     const userNav = this.state.loggedIn ?
       <div>
@@ -195,30 +166,6 @@ class App extends Component {
         {userNav}
       </nav>;
 
-    const tableCss = {width: '90%', border: '2px solid black', borderCollapse: 'collapse', margin: 'auto'};
-
-    const offersList = this.state.offers.length > 0 ?
-      <table style={tableCss} >
-        <tbody>
-          <tr>
-            <th>Title</th>
-            <th>Creator</th>
-            <th>Creation Date</th>
-            <th>Description</th>
-            <th>Price</th>
-          </tr>
-          {offers.map(offer => <tr key={offer.id}> 
-                                <td>{offer.title}</td>
-                                <td>{offer.creator}</td>
-                                <td>{offer.creationDate}</td>
-                                <td>{offer.description}</td>
-                                <td>{offer.price}$</td>
-                              </tr>)}
-        </tbody>
-      </table>
-      :
-      <p>no offers</p>
-    
     return (
       <Router>
         <div>
@@ -231,9 +178,7 @@ class App extends Component {
           
           <Route exact path="/">
             <h1>Offer list</h1>
-            <div>
-              {offersList}
-            </div>
+            <OfferList />
           </Route>
           
           <Route path="/register">
@@ -253,6 +198,9 @@ class App extends Component {
               <OfferForm ref={this.offerForm} handleAddOffer={this.handleAddOffer} />
             </div>
           </Route>
+
+          <Route exact path="/offer/:id" component={OfferView} />
+        
         </div>
       </Router>
     );

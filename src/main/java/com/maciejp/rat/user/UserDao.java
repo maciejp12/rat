@@ -30,11 +30,18 @@ public class UserDao {
                 "FROM user_profile " +
                 "WHERE user_id = ?";
 
-        return jdbcTemplate.queryForObject(
-                sql,
-                mapUser(),
-                id
-        );
+        User user;
+        try {
+            user = jdbcTemplate.queryForObject(
+                    sql,
+                    mapUser(),
+                    id
+            );
+        } catch (EmptyResultDataAccessException e) {
+            return null;
+        }
+
+        return user;
     }
 
     public User selectUserByUsername(String username) {
@@ -53,6 +60,7 @@ public class UserDao {
         } catch (EmptyResultDataAccessException e) {
             return null;
         }
+
         return user;
     }
 
@@ -81,6 +89,20 @@ public class UserDao {
                 sql,
                 Boolean.class,
                 email
+        );
+    }
+
+    public Boolean selectIdExists(long id) {
+        String sql = "" +
+                "SELECT EXISTS(" +
+                "SELECT user_id " +
+                "FROM user_profile " +
+                "WHERE user_id = ?)";
+
+        return jdbcTemplate.queryForObject(
+                sql,
+                Boolean.class,
+                id
         );
     }
 

@@ -17,7 +17,7 @@ class RegisterForm extends Component {
     this.handleEmailChange = this.handleEmailChange.bind(this);
     this.handlePasswordChange = this.handlePasswordChange.bind(this);
     this.handleConfirmPasswordChange = this.handleConfirmPasswordChange.bind(this);
-    this.checkConfirmPassword = this.checkConfirmPassword.bind(this);
+    this.validateInput = this.validateInput.bind(this);
   }
 
   setErrorMessage(message) {
@@ -50,9 +50,24 @@ class RegisterForm extends Component {
     });
   }
 
-  checkConfirmPassword() {
-    return this.state.password === this.state.confirmPassword;
+  validateInput() {
+    if (!this.checkConfirmPassword()) {
+      return false;
+    }
+
+    return true;
   }
+
+  checkConfirmPassword() {
+    let valid = this.state.password === this.state.confirmPassword;
+    if (!valid) {
+      this.setState({
+        errorMessage: 'passwords not matching'
+      });
+    }
+    return valid;
+  }
+
 
   render() {
     return (

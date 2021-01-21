@@ -23,6 +23,7 @@ public class UserValidator {
         int len = password.length();
         return len >= minPasswordLength && len <= maxPasswordLength;
     }
+
     public boolean validateEmail(String email) {
         Pattern p = Pattern.compile(emailRegexp);
         Matcher m = p.matcher(email);

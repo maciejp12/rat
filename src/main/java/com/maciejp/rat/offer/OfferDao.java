@@ -49,6 +49,19 @@ public class OfferDao {
         );
     }
 
+    public List<Offer> selectOfferByCreator(long userId) {
+        String sql = "" +
+                "SELECT offer_id, title, description, price, creator, creation_date " +
+                "FROM OFFER " +
+                "WHERE creator = ? ";
+
+        return jdbcTemplate.query(
+                sql,
+                mapOffer(),
+                userId
+        );
+    }
+
     public long insertOffer(Offer offer, long creatorId) {
         String sql = "" +
                 "INSERT INTO offer(offer_id, title, description, price, creator, creation_date) " +

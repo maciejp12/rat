@@ -1,6 +1,7 @@
 package com.maciejp.rat.offer;
 
 import com.maciejp.rat.exception.OfferCreationException;
+import com.maciejp.rat.exception.OfferSelectionException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -34,6 +35,20 @@ public class OfferController {
         return ResponseEntity
                 .ok()
                 .body(offer);
+    }
+
+    @GetMapping("/creator/{id}")
+    public ResponseEntity<?> getOfferByCreator(@PathVariable("id") long id) {
+        List<Offer> offers;
+        try {
+            offers = offerService.getOfferByCreator(id);
+        } catch (OfferSelectionException e) {
+            return ResponseEntity.status(e.getHttpStatus()).body(e.buildResponse());
+        }
+
+        return ResponseEntity
+                .ok()
+                .body(offers);
     }
 
     @PostMapping
