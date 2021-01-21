@@ -9,10 +9,7 @@ import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 
 @Repository
 public class UserDao {
@@ -26,7 +23,7 @@ public class UserDao {
 
     public User selectUserById(long id) {
         String sql = "" +
-                "SELECT user_id, username, email, password " +
+                "SELECT user_id, username, email, password, register_date " +
                 "FROM user_profile " +
                 "WHERE user_id = ?";
 
@@ -46,7 +43,7 @@ public class UserDao {
 
     public User selectUserByUsername(String username) {
         String sql = "" +
-                "SELECT user_id, username, email, password " +
+                "SELECT user_id, username, email, password, register_date " +
                 "FROM user_profile " +
                 "WHERE username = ?";
 
@@ -112,12 +109,14 @@ public class UserDao {
                 "user_id, " +
                 "username, " +
                 "email, " +
-                "password) " +
+                "password, " +
+                "register_date) " +
                 "VALUES (" +
                 "DEFAULT, " +
                 "?, " +
                 "?, " +
-                "?)";
+                "?, " +
+                "now())";
 
         KeyHolder keyHolder = new GeneratedKeyHolder();
         int add = jdbcTemplate.update(new PreparedStatementCreator() {
@@ -141,11 +140,14 @@ public class UserDao {
             String username = resultSet.getString("username");
             String email = resultSet.getString("email");
             String password = resultSet.getString("password");
+            Timestamp registerDate = resultSet.getTimestamp("register_date");
+
             return new User(
                     id,
                     username,
                     email,
-                    password
+                    password,
+                    registerDate
             );
         });
     }

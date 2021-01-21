@@ -5,7 +5,8 @@ CREATE TABLE user_profile (
     user_id Bigserial PRIMARY KEY NOT NULL,
     username varchar(100) UNIQUE NOT NULL,
     email varchar(100) UNIQUE NOT NULL,
-    password varchar(100) NOT NULL
+    password varchar(100) NOT NULL,
+    register_date timestamp NOT NULL
 );
 
 

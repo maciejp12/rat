@@ -3,6 +3,8 @@ package com.maciejp.rat.user;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import java.sql.Timestamp;
+
 public class User {
 
     private final long id;
@@ -13,15 +15,19 @@ public class User {
 
     private String password;
 
+    private Timestamp registerDate;
+
     public User(
             @JsonProperty(value = "id", access = JsonProperty.Access.READ_ONLY) long id,
             @JsonProperty("username") String username,
             @JsonProperty("email") String email,
-            @JsonProperty("password") String password) {
+            @JsonProperty("password") String password,
+            @JsonProperty(value = "registerDate", access = JsonProperty.Access.READ_ONLY) Timestamp registerDate) {
         this.id = id;
         this.username = username;
         this.email = email;
         this.password = password;
+        this.registerDate = registerDate;
     }
 
     public long getId() {
@@ -53,6 +59,14 @@ public class User {
         this.password = password;
     }
 
+    public Timestamp getRegisterDate() {
+        return registerDate;
+    }
+
+    public void setRegisterDate(Timestamp registerDate) {
+        this.registerDate = registerDate;
+    }
+
     @Override
     public String toString() {
         return "User{" +
@@ -60,6 +74,7 @@ public class User {
                 ", username='" + username + '\'' +
                 ", email='" + email + '\'' +
                 ", password='" + password + '\'' +
+                ", registerDate=" + registerDate +
                 '}';
     }
 }
