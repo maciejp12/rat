@@ -1,9 +1,14 @@
 package com.maciejp.rat.offer;
 
 import com.maciejp.rat.exception.OfferCreationException;
+import com.maciejp.rat.exception.OfferDeleteException;
 import com.maciejp.rat.exception.OfferSelectionException;
+import com.maciejp.rat.user.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
@@ -64,5 +69,22 @@ public class OfferController {
         return ResponseEntity
                 .ok()
                 .body(offerService.getOfferById(id));
+    }
+
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<?> deleteOfferById(@PathVariable("id") long id) {
+        Offer offer;
+        try {
+            Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+            offer = offerService.deleteOfferById(id, auth.getName());
+        } catch (OfferDeleteException e) {
+            return ResponseEntity
+                    .status(e.getHttpStatus())
+                    .body(e.buildResponse());
+        }
+
+        return ResponseEntity
+                .ok()
+                .body(offer);
     }
 }

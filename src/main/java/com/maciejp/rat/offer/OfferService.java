@@ -1,6 +1,7 @@
 package com.maciejp.rat.offer;
 
 import com.maciejp.rat.exception.OfferCreationException;
+import com.maciejp.rat.exception.OfferDeleteException;
 import com.maciejp.rat.exception.OfferSelectionException;
 import com.maciejp.rat.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,6 +34,10 @@ public class OfferService {
         return offerDao.selectOfferById(id);
     }
 
+    public Boolean offerIdExists(long id) {
+        return offerDao.selectIdExists(id);
+    }
+
     public List<Offer> getOfferByCreator(String username) throws OfferSelectionException {
         if (!userService.usernameExists(username)) {
             throw new OfferSelectionException("User does not exists", HttpStatus.BAD_REQUEST);
@@ -60,5 +65,29 @@ public class OfferService {
 
         long creatorId = userService.getUserByUsername(creatorUsername).getId();
         return offerDao.insertOffer(offer, creatorId);
+    }
+
+    public Offer deleteOfferById(long id, String username) throws OfferDeleteException {
+        if (!userService.usernameExists(username)) {
+            throw new OfferDeleteException("Please log in", HttpStatus.CONFLICT);
+        }
+
+        if (!offerIdExists(id)) {
+            throw new OfferDeleteException("Offer does not exist", HttpStatus.CONFLICT);
+        }
+
+        Offer offer = getOfferById(id);
+
+        if (!offer.getCreator().equals(username)) {
+            throw new OfferDeleteException("You can only delete your offers", HttpStatus.CONFLICT);
+        }
+
+        int delete = offerDao.deleteOfferById(id);
+
+        if (delete == 0) {
+            throw new OfferDeleteException("Cannot delete this offer", HttpStatus.BAD_REQUEST);
+        }
+
+        return offer;
     }
 }

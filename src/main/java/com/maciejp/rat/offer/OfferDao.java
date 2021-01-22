@@ -49,6 +49,20 @@ public class OfferDao {
         );
     }
 
+    public Boolean selectIdExists(long id) {
+        String sql = "" +
+                "SELECT EXISTS(" +
+                "SELECT offer_id " +
+                "FROM offer " +
+                "WHERE offer_id = ?)";
+
+        return jdbcTemplate.queryForObject(
+                sql,
+                Boolean.class,
+                id
+        );
+    }
+
     public List<Offer> selectOfferByCreator(String username) {
         String sql = "" +
                 "SELECT offer_id, title, description, price, creator, creation_date " +
@@ -82,6 +96,17 @@ public class OfferDao {
 
         long id = (long) keyHolder.getKeys().get("offer_id");
         return id;
+    }
+
+    public int deleteOfferById(long id) {
+        String sql = "" +
+                "DELETE FROM offer " +
+                "WHERE offer_id = ?";
+
+        return jdbcTemplate.update(
+                sql,
+                id
+        );
     }
 
     private RowMapper<Offer> mapOffer() {
