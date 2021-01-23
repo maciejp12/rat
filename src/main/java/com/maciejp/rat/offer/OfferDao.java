@@ -2,6 +2,7 @@ package com.maciejp.rat.offer;
 
 import com.maciejp.rat.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.PreparedStatementCreator;
 import org.springframework.jdbc.core.RowMapper;
@@ -42,11 +43,18 @@ public class OfferDao {
                 "FROM offer " +
                 "WHERE offer_id = ?";
 
-        return jdbcTemplate.queryForObject(
-                sql,
-                mapOffer(),
-                id
-        );
+        Offer offer;
+        try {
+            offer = jdbcTemplate.queryForObject(
+                    sql,
+                    mapOffer(),
+                    id
+            );
+        } catch (EmptyResultDataAccessException e) {
+            return null;
+        }
+
+        return offer;
     }
 
     public Boolean selectIdExists(long id) {

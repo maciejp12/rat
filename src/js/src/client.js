@@ -16,6 +16,16 @@ export const getAllOffers = () => {
   });
 }
 
+export const getOfferById = (id) => {
+  return fetch(offerUrl + '/' + id, {
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json'
+    },
+    method: 'GET'
+  });
+}
+
 export const getUserOffers = (username) => {
   return fetch(userOfferUrl + '/' + username, {
     headers: {

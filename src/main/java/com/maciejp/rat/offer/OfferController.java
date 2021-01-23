@@ -32,8 +32,14 @@ public class OfferController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Offer> getOfferById(@PathVariable("id") long id) {
-        Offer offer = offerService.getOfferById(id);
+    public ResponseEntity<?> getOfferById(@PathVariable("id") long id) {
+        Offer offer;
+        try {
+            offer = offerService.getOfferById(id);
+        } catch (OfferSelectionException e) {
+            return ResponseEntity.status(e.getHttpStatus()).body(e.buildResponse());
+        }
+
         return ResponseEntity
                 .ok()
                 .body(offer);

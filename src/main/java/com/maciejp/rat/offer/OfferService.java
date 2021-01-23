@@ -30,8 +30,14 @@ public class OfferService {
         return offerDao.selectAllOffers();
     }
 
-    public Offer getOfferById(long id) {
-        return offerDao.selectOfferById(id);
+    public Offer getOfferById(long id) throws OfferSelectionException {
+        Offer offer =  offerDao.selectOfferById(id);
+
+        if (offer == null) {
+            throw new OfferSelectionException("Offer does not exist", HttpStatus.NOT_FOUND);
+        }
+
+        return offer;
     }
 
     public Boolean offerIdExists(long id) {
@@ -40,7 +46,7 @@ public class OfferService {
 
     public List<Offer> getOfferByCreator(String username) throws OfferSelectionException {
         if (!userService.usernameExists(username)) {
-            throw new OfferSelectionException("User does not exists", HttpStatus.BAD_REQUEST);
+            throw new OfferSelectionException("User does not exist", HttpStatus.BAD_REQUEST);
         }
 
         return offerDao.selectOfferByCreator(username);

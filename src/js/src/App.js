@@ -127,11 +127,6 @@ class App extends Component {
         }
 
         res.json().then(json => {
-          /*console.log(json);
-          let offers = this.state.offers.concat(json);
-          this.setState({
-            offers
-          });*/
           this.offerForm.current.setErrorMessage('');
           window.location.href = '/';
         })
