@@ -1,7 +1,6 @@
 package com.maciejp.rat.user;
 
-import com.maciejp.rat.exception.RegisterException;
-import com.maciejp.rat.exception.UserSelectionException;
+import com.maciejp.rat.exception.ApiException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -27,11 +26,11 @@ public class UserService {
         return userDao.selectUserById(id);
     }
 
-    public User getUserByUsername(String username) throws UserSelectionException {
+    public User getUserByUsername(String username) throws ApiException {
         User user = userDao.selectUserByUsername(username);
 
         if (user == null) {
-            throw new UserSelectionException("User does not exist", HttpStatus.BAD_REQUEST);
+            throw new ApiException("User does not exist", HttpStatus.BAD_REQUEST);
         }
 
         return user;
@@ -49,29 +48,29 @@ public class UserService {
         return userDao.selectIdExists(id);
     }
 
-    public long addUser(User user) throws RegisterException {
+    public long addUser(User user) throws ApiException {
         if (!userValidator.validateName(user.getUsername())) {
-            throw new RegisterException(userValidator.getUsernameErrorMessage(), HttpStatus.BAD_REQUEST);
+            throw new ApiException(userValidator.getUsernameErrorMessage(), HttpStatus.BAD_REQUEST);
         }
 
         if (!userValidator.validatePassowrd(user.getPassword())) {
-            throw new RegisterException(userValidator.getPasswordErrorMessage(), HttpStatus.BAD_REQUEST);
+            throw new ApiException(userValidator.getPasswordErrorMessage(), HttpStatus.BAD_REQUEST);
         }
 
         if (!userValidator.validateEmail(user.getEmail())) {
-            throw new RegisterException("Invalid email", HttpStatus.BAD_REQUEST);
+            throw new ApiException("Invalid email", HttpStatus.BAD_REQUEST);
         }
 
         if (!userValidator.validatePhoneNumber(user.getPhoneNumber())) {
-            throw new RegisterException("Invalid phone number", HttpStatus.BAD_REQUEST);
+            throw new ApiException("Invalid phone number", HttpStatus.BAD_REQUEST);
         }
 
         if (usernameExists(user.getUsername())) {
-            throw new RegisterException("Username already in use", HttpStatus.CONFLICT);
+            throw new ApiException("Username already in use", HttpStatus.CONFLICT);
         }
 
         if (emailExists(user.getEmail())) {
-            throw new RegisterException("Email already in use", HttpStatus.CONFLICT);
+            throw new ApiException("Email already in use", HttpStatus.CONFLICT);
         }
 
         user.setPassword(passwordEncoder.encode(user.getPassword()));

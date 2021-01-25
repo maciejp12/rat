@@ -1,7 +1,6 @@
 package com.maciejp.rat.user;
 
-import com.maciejp.rat.exception.RegisterException;
-import com.maciejp.rat.exception.UserSelectionException;
+import com.maciejp.rat.exception.ApiException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
@@ -37,10 +36,10 @@ public class UserController {
         long id;
         try {
             id = userService.addUser(user);
-        } catch (RegisterException e) {
+        } catch (ApiException e) {
             return ResponseEntity
                     .status(e.getHttpStatus())
-                    .body(e.buildResponse());
+                    .body(e.buildResponseBody());
         }
         User newUser = userService.getUserById(id);
         newUser.setPassword(null);
@@ -87,10 +86,10 @@ public class UserController {
 
         try {
             user = userService.getUserByUsername(username);
-        } catch (UserSelectionException e) {
+        } catch (ApiException e) {
             return ResponseEntity
                     .status(e.getHttpStatus())
-                    .body(e.buildResponse());
+                    .body(e.buildResponseBody());
         }
 
         return ResponseEntity

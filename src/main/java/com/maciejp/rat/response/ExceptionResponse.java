@@ -1,12 +1,12 @@
-package com.maciejp.rat.offer;
+package com.maciejp.rat.response;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class OfferCreationErrorResponse {
+public class ExceptionResponse {
 
     private final String message;
 
-    public OfferCreationErrorResponse(@JsonProperty("message") String message) {
+    public ExceptionResponse(@JsonProperty("message") String message) {
         this.message = message;
     }
 

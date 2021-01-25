@@ -1,8 +1,6 @@
 package com.maciejp.rat.offer;
 
-import com.maciejp.rat.exception.OfferCreationException;
-import com.maciejp.rat.exception.OfferDeleteException;
-import com.maciejp.rat.exception.OfferSelectionException;
+import com.maciejp.rat.exception.ApiException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -36,8 +34,10 @@ public class OfferController {
         Offer offer;
         try {
             offer = offerService.getOfferById(id);
-        } catch (OfferSelectionException e) {
-            return ResponseEntity.status(e.getHttpStatus()).body(e.buildResponse());
+        } catch (ApiException e) {
+            return ResponseEntity
+                    .status(e.getHttpStatus())
+                    .body(e.buildResponseBody());
         }
 
         return ResponseEntity
@@ -50,8 +50,10 @@ public class OfferController {
         List<Offer> offers;
         try {
             offers = offerService.getOfferByCreator(username);
-        } catch (OfferSelectionException e) {
-            return ResponseEntity.status(e.getHttpStatus()).body(e.buildResponse());
+        } catch (ApiException e) {
+            return ResponseEntity
+                    .status(e.getHttpStatus())
+                    .body(e.buildResponseBody());
         }
 
         return ResponseEntity
@@ -65,8 +67,10 @@ public class OfferController {
         try {
             String creatorUsername = SecurityContextHolder.getContext().getAuthentication().getName();
             id = offerService.addOffer(offer, creatorUsername);
-        } catch (OfferCreationException e) {
-            return ResponseEntity.status(e.getHttpStatus()).body(e.buildResponse());
+        } catch (ApiException e) {
+            return ResponseEntity
+                    .status(e.getHttpStatus())
+                    .body(e.buildResponseBody());
         }
 
         return ResponseEntity
@@ -80,10 +84,10 @@ public class OfferController {
         try {
             Authentication auth = SecurityContextHolder.getContext().getAuthentication();
             offer = offerService.deleteOfferById(id, auth.getName());
-        } catch (OfferDeleteException e) {
+        } catch (ApiException e) {
             return ResponseEntity
                     .status(e.getHttpStatus())
-                    .body(e.buildResponse());
+                    .body(e.buildResponseBody());
         }
 
         return ResponseEntity
