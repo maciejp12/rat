@@ -122,7 +122,7 @@ class OfferView extends Component {
         <p>creator: {this.state.creator}</p>
         <p>description: {this.state.description} {isOwner && <button>edit</button>}</p>
         <p>price: {this.state.price} {isOwner && <button>edit</button>}</p>
-        <p>creationDate: {this.state.creationDate} {isOwner && <button>edit</button>}</p>
+        <p>creationDate: {this.state.creationDate} </p>
       </div>
 
     let errorMessage = 

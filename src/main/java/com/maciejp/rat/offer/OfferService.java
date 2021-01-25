@@ -73,7 +73,7 @@ public class OfferService {
 
     public Offer deleteOfferById(long id, String username) throws ApiException {
         if (!userService.usernameExists(username)) {
-            throw new ApiException("Please log in", HttpStatus.CONFLICT);
+            throw new ApiException("Please log in", HttpStatus.UNAUTHORIZED);
         }
 
         if (!offerIdExists(id)) {
@@ -93,5 +93,50 @@ public class OfferService {
         }
 
         return offer;
+    }
+
+    public Offer updateOffer(Offer offer, String username, long id) throws ApiException {
+        Offer toUpdate = getOfferById(id);
+
+        if (toUpdate == null) {
+            throw new ApiException("Offer does not exist", HttpStatus.NOT_FOUND);
+        }
+
+        if (!userService.usernameExists(username)) {
+            throw new ApiException("Please log in", HttpStatus.UNAUTHORIZED);
+        }
+
+        if (!toUpdate.getCreator().equals(username)) {
+            throw new ApiException("You can only update your offers", HttpStatus.CONFLICT);
+        }
+
+        String title = offer.getTitle();
+        String description = offer.getDescription();
+        Float price = offer.getPrice();
+
+        if (title != null) {
+            if (!offerValidator.validateTitleLength(title)) {
+                throw new ApiException(offerValidator.getTitleErrorMessage(), HttpStatus.BAD_REQUEST);
+            }
+            offerDao.updateOfferTitleById(id, title);
+        }
+
+        if (description != null) {
+            if (!offerValidator.validateDescriptionLength(description)) {
+                throw new ApiException(offerValidator.getDescriptionErrorMessage(), HttpStatus.BAD_REQUEST);
+            }
+            offerDao.updateOfferDescriptionById(id, description);
+        }
+
+        if (price != null) {
+            if (!offerValidator.validatePrice(price)) {
+                throw new ApiException(offerValidator.getPriceErrorMessage(), HttpStatus.BAD_REQUEST);
+            }
+            offerDao.updateOfferPriceById(id, price);
+        }
+
+        toUpdate = getOfferById(id);
+
+        return toUpdate;
     }
 }

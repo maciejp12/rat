@@ -94,4 +94,20 @@ public class OfferController {
                 .ok()
                 .body(offer);
     }
+
+    @PatchMapping("/update/{id}")
+    public ResponseEntity<?> updateOffer(@RequestBody Offer offer, @PathVariable("id") long id) {
+        try {
+            Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+            offer = offerService.updateOffer(offer, auth.getName(), id);
+        } catch (ApiException e) {
+            return ResponseEntity
+                    .status(e.getHttpStatus())
+                    .body(e.buildResponseBody());
+        }
+
+        return ResponseEntity
+                .ok()
+                .body(offer);
+    }
 }

@@ -12,7 +12,7 @@ public class Offer {
 
     private String description;
 
-    private float price;
+    private Float price;
 
     private String creator;
 
@@ -21,7 +21,7 @@ public class Offer {
     public Offer(@JsonProperty(value = "id", access = JsonProperty.Access.READ_ONLY) long id,
                  @JsonProperty("title") String title,
                  @JsonProperty("description") String description,
-                 @JsonProperty("price") float price,
+                 @JsonProperty("price") Float price,
                  @JsonProperty(value = "creator", access = JsonProperty.Access.READ_ONLY) String creator,
                  @JsonProperty(value = "creation_date", access = JsonProperty.Access.READ_ONLY) Timestamp timestamp) {
         this.id = id;
@@ -52,11 +52,11 @@ public class Offer {
         this.description = description;
     }
 
-    public float getPrice() {
+    public Float getPrice() {
         return price;
     }
 
-    public void setPrice(float price) {
+    public void setPrice(Float price) {
         this.price = price;
     }
 

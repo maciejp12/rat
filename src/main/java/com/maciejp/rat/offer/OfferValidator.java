@@ -20,7 +20,7 @@ public class OfferValidator {
         return len >= minDescriptionLength && len <= maxDescriptionLength;
     }
 
-    public boolean validatePrice(float price) {
+    public boolean validatePrice(Float price) {
         return price > 0.f;
     }
 

@@ -117,12 +117,51 @@ public class OfferDao {
         );
     }
 
+    public int updateOfferTitleById(long id, String title) {
+        String sql = "" +
+                "UPDATE offer " +
+                "SET title = ? " +
+                "WHERE offer_id = ?";
+
+        return jdbcTemplate.update(
+                sql,
+                title,
+                id
+        );
+    }
+
+    public int updateOfferDescriptionById(long id, String description) {
+        String sql = "" +
+                "UPDATE offer " +
+                "SET description = ? " +
+                "WHERE offer_id = ?";
+
+        return jdbcTemplate.update(
+                sql,
+                description,
+                id
+        );
+    }
+
+    public int updateOfferPriceById(long id, Float price) {
+        String sql = "" +
+                "UPDATE offer " +
+                "SET price = ? " +
+                "WHERE offer_id = ?";
+
+        return jdbcTemplate.update(
+                sql,
+                price,
+                id
+        );
+    }
+
     private RowMapper<Offer> mapOffer() {
         return (resultSet, i) -> {
             long id = resultSet.getLong("offer_id");
             String title = resultSet.getString("title");
             String description = resultSet.getString("description");
-            float price = resultSet.getFloat("price");
+            Float price = resultSet.getFloat("price");
             String creator = userService.getUserById(resultSet.getLong("creator")).getUsername();
             Timestamp creationDate = resultSet.getTimestamp("creation_date");
 
