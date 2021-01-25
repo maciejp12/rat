@@ -199,7 +199,9 @@ class App extends Component {
             </div>
           </Route>
 
-          <Route exact path="/offer/:id" component={OfferView} />
+          <Route exact path="/offer/:id" component={(props) => (
+            <OfferView id={props.match.params.id} loggedIn={this.state.loggedIn} loggedName={this.state.username}/>
+          )} />
         
           <Route exact path="/user/:username" component={UserView} />
 

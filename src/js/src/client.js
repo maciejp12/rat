@@ -1,4 +1,5 @@
 const offerUrl = 'http://127.0.0.1:8080/api/offer';
+const offerDeleteUrl = 'http://127.0.0.1:8080/api/offer/delete';
 const userOfferUrl = 'http://127.0.0.1:8080/api/offer/creator';
 const userUrl = 'http://127.0.0.1:8080/api/user';
 const userDetailsUrl = 'http://127.0.0.1:8080/api/user/username';
@@ -23,6 +24,17 @@ export const getOfferById = (id) => {
       'Content-Type': 'application/json'
     },
     method: 'GET'
+  });
+}
+
+export const deleteOfferById = (id, token, type) => {
+  return fetch(offerDeleteUrl + '/' + id, {
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'Authorization': type + ' ' + token
+    },
+    method: 'DELETE'
   });
 }
 
