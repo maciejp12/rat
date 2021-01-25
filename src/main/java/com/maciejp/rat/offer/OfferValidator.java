@@ -21,7 +21,7 @@ public class OfferValidator {
     }
 
     public boolean validatePrice(Float price) {
-        return price > 0.f;
+        return price > 0.f && price < Math.pow(10, 13);
     }
 
     public String getTitleErrorMessage() {
@@ -33,6 +33,6 @@ public class OfferValidator {
     }
 
     public String getPriceErrorMessage() {
-        return "Price must be greater than 0";
+        return "Price must be greater than 0 and lesser than " + Math.pow(10, 13);
     }
 }
