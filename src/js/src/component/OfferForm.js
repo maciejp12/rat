@@ -44,8 +44,9 @@ class OfferForm extends Component {
 
   handlePriceChange(event) {
     this.setState({
-      price: event.target.value
-    })
+      price: event.target.value.replace(',', '.')
+    });
+    console.log(this.state.price);
   }
 
   render() {
