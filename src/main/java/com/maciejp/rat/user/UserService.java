@@ -77,5 +77,18 @@ public class UserService {
         return userDao.insertUser(user);
     }
 
+    public User deleteUserByUsername(String username) throws ApiException {
+        if (!usernameExists(username)) {
+            throw new ApiException("User does not exist", HttpStatus.NOT_FOUND);
+        }
 
+        User deletedUser = getUserByUsername(username);
+        int delete = userDao.deleteUserByUsername(username);
+
+        if (delete == 0) {
+            throw new ApiException("Cannot delete this user", HttpStatus.BAD_REQUEST);
+        }
+
+        return deletedUser;
+    }
 }

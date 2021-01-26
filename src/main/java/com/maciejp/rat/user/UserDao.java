@@ -137,6 +137,17 @@ public class UserDao {
         return id;
     }
 
+    public int deleteUserByUsername(String username) {
+        String sql = "" +
+                "DELETE FROM user_profile " +
+                "WHERE username = ?";
+
+        return jdbcTemplate.update(
+                sql,
+                username
+        );
+    }
+
     private RowMapper<User> mapUser() {
         return ((resultSet, i) -> {
             long id = resultSet.getLong("user_id");
