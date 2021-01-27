@@ -50,6 +50,14 @@ public class OfferService {
         return offerDao.selectOfferByCreator(username);
     }
 
+    public Integer getOfferVisitCount(long id) throws ApiException {
+        if (!offerIdExists(id)) {
+            throw new ApiException("Offer does not exist", HttpStatus.NOT_FOUND);
+        }
+
+        return offerDao.selectOfferVisitCount(id);
+    }
+
     public long addOffer(Offer offer, String creatorUsername) throws ApiException {
         if (!userService.usernameExists(creatorUsername)) {
             throw new ApiException("Please log in", HttpStatus.UNAUTHORIZED);

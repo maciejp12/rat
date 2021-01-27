@@ -61,6 +61,22 @@ public class OfferController {
                 .body(offers);
     }
 
+    @GetMapping("/visits/{id}")
+    public ResponseEntity<?> getOfferVisitCount(@PathVariable("id") long id) {
+        Integer visits;
+        try  {
+            visits = offerService.getOfferVisitCount(id);
+        } catch (ApiException e) {
+            return ResponseEntity
+                    .status(e.getHttpStatus())
+                    .body(e.buildResponseBody());
+        }
+
+        return ResponseEntity
+                .ok()
+                .body(new OfferVisitsResponse(visits));
+    }
+
     @PostMapping
     public ResponseEntity<?> addOffer(@RequestBody Offer offer) {
         long id;

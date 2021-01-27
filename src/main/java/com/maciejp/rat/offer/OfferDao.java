@@ -84,6 +84,19 @@ public class OfferDao {
         );
     }
 
+    public Integer selectOfferVisitCount(long id) {
+        String sql = "" +
+                "SELECT COUNT(*) AS count " +
+                "FROM offer_visit " +
+                "WHERE visited_offer = ?";
+
+        return jdbcTemplate.queryForObject(
+                sql,
+                Integer.class,
+                id
+        );
+    }
+
     public long insertOffer(Offer offer, long creatorId) {
         String sql = "" +
                 "INSERT INTO offer(offer_id, title, description, price, creator, creation_date) " +

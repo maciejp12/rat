@@ -1,5 +1,6 @@
 DROP TABLE IF EXISTS user_profile CASCADE;
 DROP TABLE IF EXISTS offer CASCADE;
+DROP TABLE IF EXISTS offer_visit CASCADE;
 
 CREATE TABLE user_profile (
     user_id BIGSERIAL PRIMARY KEY NOT NULL,
@@ -16,8 +17,14 @@ CREATE TABLE offer (
     title VARCHAR(100) NOT NULL,
     description VARCHAR(300) NOT NULL,
     price NUMERIC(16, 2) NOT NULL,
-    creator BIGSERIAL REFERENCES user_profile (user_id),
+    creator BIGINT REFERENCES user_profile (user_id),
     creation_date TIMESTAMP NOT NULL
 );
 
 
+CREATE TABLE offer_visit (
+    visit_id BIGSERIAL PRIMARY KEY NOT NULL,
+    visited_offer BIGINT REFERENCES offer (offer_id),
+    visitor BIGINT REFERENCES user_profile (user_id),
+    visit_date TIMESTAMP NOT NULL
+);
