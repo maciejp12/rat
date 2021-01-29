@@ -2,6 +2,7 @@ const offerUrl = 'http://127.0.0.1:8080/api/offer';
 const offerDeleteUrl = 'http://127.0.0.1:8080/api/offer/delete';
 const offerUpdateUrl = 'http://127.0.0.1:8080/api/offer/update';
 const userOfferUrl = 'http://127.0.0.1:8080/api/offer/creator';
+const offerVisitsUrl = 'http://127.0.0.1:8080/api/offer/visits';
 const userUrl = 'http://127.0.0.1:8080/api/user';
 const userDetailsUrl = 'http://127.0.0.1:8080/api/user/username';
 const loginUrl = 'http://127.0.0.1:8080/api/user/login';
@@ -52,6 +53,27 @@ export const updateOfferById = (id, token, type, data) => {
       description: data.description,
       price: data.price
     })
+  });
+}
+
+export const addOfferVisitAuth = (id, token, type) => {
+  return fetch(offerVisitsUrl + '/' + id, {
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'Authorization': type + ' ' + token
+    },
+    method: 'POST'
+  });
+}
+
+export const addOfferVisit = (id) => {
+  return fetch(offerVisitsUrl + '/' + id, {
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+    },
+    method: 'POST'
   });
 }
 

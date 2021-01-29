@@ -79,6 +79,32 @@ public class OfferService {
         return offerDao.insertOffer(offer, creatorId);
     }
 
+    public Integer addOfferVisit(long id) throws ApiException {
+        if (!offerIdExists(id)) {
+            throw new ApiException("Offer does not exist", HttpStatus.NOT_FOUND);
+        }
+
+        int add = offerDao.insertOfferVisit(id);
+
+        return getOfferVisitCount(id);
+    }
+
+    public Integer addOfferUserVisit(long id, String username) {
+        if (!offerIdExists(id)) {
+            throw new ApiException("Offer does not exist", HttpStatus.NOT_FOUND);
+        }
+
+        if (!userService.usernameExists(username)) {
+            return addOfferVisit(id);
+        }
+
+        long userId = userService.getUserByUsername(username).getId();
+
+        int add = offerDao.insertUserOfferVisit(id, userId);
+
+        return getOfferVisitCount(id);
+    }
+
     public Offer deleteOfferById(long id, String username) throws ApiException {
         if (!userService.usernameExists(username)) {
             throw new ApiException("Please log in", HttpStatus.UNAUTHORIZED);
@@ -94,6 +120,7 @@ public class OfferService {
             throw new ApiException("You can only delete your offers", HttpStatus.CONFLICT);
         }
 
+        int deletedVisits = offerDao.deleteOfferVisits(id);
         int delete = offerDao.deleteOfferById(id);
 
         if (delete == 0) {

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { getOfferById , deleteOfferById , updateOfferById } from '../client';
+import { getOfferById , deleteOfferById , updateOfferById , auth, addOfferVisit , addOfferVisitAuth} from '../client';
 
 
 class OfferView extends Component {
@@ -8,23 +8,24 @@ class OfferView extends Component {
     super(props);
 
     this.state = {
-      isFetching: false,
-      id: this.props.id,
+      isFetching: true,
+      id: this.props.match.params.id,
       title: '',
       creator: '',
       description: '',
       price: '',
       creationDate: '',
       exists: true,
-      loggedIn: this.props.loggedIn,
-      loggedName: this.props.loggedName,
+      loggedIn: false,
+      loggedName: '',
       editingTitle: false,
       editingDescription: false,
       editingPrice: false,
       titleUpdate: '',
       descriptionUpdate: '',
       priceUpdate: '',
-      errorMessage: ''
+      errorMessage: '',
+      visits: '',
     }
 
     this.deleteOffer = this.deleteOffer.bind(this);
@@ -43,25 +44,41 @@ class OfferView extends Component {
     this.setState({
       isFetching: true
     });
+    if (localStorage.getItem('token') != null) {
+      auth(localStorage.getItem('token-type') + ' ' + localStorage.getItem('token'))
+        .then(res => res.json())
+        .then(json => {
+          this.setState({
+            loggedIn: true,
+            loggedName: json.username
+          });
+        })
+        .catch(error => {
+          this.setState({
+            loggedIn: false
+          });
+        });
+    }
+    this.getOfferDetails();
+  }
 
+  getOfferDetails() {
     getOfferById(this.state.id)
       .then(res => {
         if (!res.ok) {
           if (res.status === 404) {
             res.json().then(json => {
               this.setState({
-                exists: false
+                exists: false,
+                isFetching: false
               })
             });
           } else {
             this.setState({
-              exists: false
+              exists: false,
+              isFetching: false
             })
           }
-          this.setState({
-            isFetching: false
-          });
-
           return;
         }
 
@@ -73,12 +90,41 @@ class OfferView extends Component {
             price: json.price,
             creationDate: json.creationDate,
             exists: true
-          })
+          });
+
+
+          if (this.state.loggedIn) {
+            addOfferVisitAuth(this.state.id, localStorage.getItem('token'), localStorage.getItem('token-type'))
+              .then(res => {
+                if (!res.ok) {
+                  return;
+                }
+    
+                res.json().then(json => {
+                  console.log(json);
+                  this.setState({
+                    visits: json.visits,
+                    isFetching: false
+                  });
+                })
+              });
+          } else {
+            addOfferVisit(this.state.id)
+            .then(res => {
+              if (!res.ok) {
+                return;
+              }
+    
+              res.json().then(json => {
+                this.setState({
+                  visits: json.visits,
+                  isFetching: false
+                });
+              })
+            });
+          }
         })
       });
-      this.setState({
-        isFetching: false
-      })
   }
 
   deleteOffer() {
@@ -371,6 +417,11 @@ class OfferView extends Component {
         <span>{this.state.errorMessage}</span>
       </div>
     
+    let visitsDetails = 
+      <div>
+        <p>visits = {this.state.visits}</p>
+      </div>
+
     return (
       <div>
         {offerDetails}
@@ -380,6 +431,7 @@ class OfferView extends Component {
           </div>
         }
         {errorMessage}
+        {visitsDetails}
       </div>
     )
   }

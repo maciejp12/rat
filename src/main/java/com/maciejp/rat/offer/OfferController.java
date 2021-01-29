@@ -1,8 +1,10 @@
 package com.maciejp.rat.offer;
 
 import com.maciejp.rat.exception.ApiException;
+import com.maciejp.rat.user.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
@@ -75,6 +77,41 @@ public class OfferController {
         return ResponseEntity
                 .ok()
                 .body(new OfferVisitsResponse(visits));
+    }
+
+    @PostMapping("/visits/{id}")
+    public ResponseEntity<?> addOfferVisit(@PathVariable("id") long id) {
+        Integer response;
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication != null) {
+            if (!(authentication instanceof AnonymousAuthenticationToken) && authentication.isAuthenticated()) {
+                String username = authentication.getName();
+
+                try {
+                    response = offerService.addOfferUserVisit(id, username);
+                } catch (ApiException e) {
+                    return ResponseEntity
+                            .status(e.getHttpStatus())
+                            .body(e.buildResponseBody());
+                }
+
+                return ResponseEntity
+                        .ok()
+                        .body(new OfferVisitsResponse(response));
+            }
+        }
+
+        try {
+            response = offerService.addOfferVisit(id);
+        } catch (ApiException e) {
+            return ResponseEntity
+                    .status(e.getHttpStatus())
+                    .body(e.buildResponseBody());
+        }
+
+        return ResponseEntity
+                .ok()
+                .body(new OfferVisitsResponse(response));
     }
 
     @PostMapping

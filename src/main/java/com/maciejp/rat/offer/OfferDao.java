@@ -119,10 +119,44 @@ public class OfferDao {
         return id;
     }
 
+    public int insertOfferVisit(long id) {
+        String sql = "" +
+                "INSERT INTO offer_visit(visit_id, visited_offer, visitor, visit_date) " +
+                "VALUES (DEFAULT, ?, null, now())";
+
+        return jdbcTemplate.update(
+                sql,
+                id
+        );
+    }
+
+    public int insertUserOfferVisit(long id, long userId) {
+        String sql = "" +
+                "INSERT INTO offer_visit(visit_id, visited_offer, visitor, visit_date) " +
+                "VALUES (DEFAULT, ?, ?, now())";
+
+        return jdbcTemplate.update(
+                sql,
+                id,
+                userId
+        );
+    }
+
     public int deleteOfferById(long id) {
         String sql = "" +
                 "DELETE FROM offer " +
                 "WHERE offer_id = ?";
+
+        return jdbcTemplate.update(
+                sql,
+                id
+        );
+    }
+
+    public int deleteOfferVisits(long id) {
+        String sql = "" +
+                "DELETE FROM offer_visit " +
+                "WHERE visited_offer = ?";
 
         return jdbcTemplate.update(
                 sql,
