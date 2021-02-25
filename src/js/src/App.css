@@ -5,3 +5,53 @@
 td, th {
   border: 2px solid black;
 }
+
+.title {
+  text-decoration: none;
+  color: #000000;
+}
+
+.title:hover {
+  color: #333333;
+}
+
+.navbar {
+  background-color: #D3AA88;
+  border-radius: 5px;
+  padding: 5px;
+  overflow: auto;
+
+}
+
+.nav-auth {
+  width: 50%;
+  float: right;
+}
+
+.nav-action {
+  width: 50%;
+  float: left;
+}
+
+.nav-auth-link {
+  float: right;
+  text-decoration: none;
+  padding-right: 10px;
+  color: #333333;
+}
+
+.nav-auth-but {
+  float: right;
+  color: #333333;
+  font-size: 100%;
+  margin: 15px;
+  border-radius: 5%;
+  background-color: #D3AA88;
+}
+
+.nav-action-link {
+  float: left;
+  text-decoration: none;
+  padding-left: 10px;
+  color: #333333;
+}

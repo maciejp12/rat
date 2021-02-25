@@ -138,26 +138,44 @@ class App extends Component {
   render() {
 
     const userNav = this.state.loggedIn ?
-      <div>
-        welcome {this.state.username}
-        <button onClick={this.handleLogout} >logout</button>
+      <div className="navbar">
         
-        <Link to="/newoffer">
-          <p>add offer</p>
-        </Link>
+        <div className="nav-action">
+          <Link className="nav-action-link" to="/newoffer">
+            <p>new offer</p>
+          </Link>
+        </div>
+        
+        
+        <div className="nav-auth">
+
+          <button className="nav-auth-but" onClick={this.handleLogout} >logout</button>  
+
+          <p className="nav-auth-link">
+            logged in as <b>{this.state.username}</b>
+          </p>
+
+        </div>
 
       </div>
       : 
-      <div>
-        <p>please log in</p>
+      <div className="navbar">
+        <div className="nav-action">
         
-        <Link to="/login">
-          <p>login</p>
-        </Link>
-        
-        <Link to="/register">
-          <p>register</p>
-        </Link>
+        </div>
+
+
+        <div className="nav-auth">          
+          
+          <Link className="nav-auth-link" to="/register">
+            <p>register</p>
+          </Link>
+
+          <Link className="nav-auth-link" to="/login">
+            <p>login</p>
+          </Link>
+
+        </div>
 
       </div>;
     
@@ -170,7 +188,7 @@ class App extends Component {
     return (
       <Router>
         <div>
-          <Link to="/">
+          <Link className="title" to="/">
             <h1>Rat</h1>
           </Link>
         </div>
