@@ -1,0 +1,23 @@
+.form-container {
+    margin-top: 20px;
+    text-align: center;
+    overflow: hidden;
+}
+
+.form-label {
+}
+
+.form-br {
+    margin-bottom: 10px;
+}
+
+.form-input-text {
+    margin-left: 10px;
+}
+
+.form-input-but {
+    color: #333333;
+    font-size: 100%;
+    border-radius: 5%;
+    background-color: #D3AA88;
+}

@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import '../Form.css';
+
 
 class RegisterForm extends Component {
   constructor(props) {
@@ -78,30 +80,48 @@ class RegisterForm extends Component {
 
   render() {
     return (
-      <form onSubmit={e => this.props.handleRegister(e, this.state)}>
-        <label>
+      <form className="form-container" onSubmit={e => this.props.handleRegister(e, this.state)}>
+        <label className="form-label">
           username 
-          <input type="text" value={this.state.username} onChange={this.handleUsernameChange} />
+          <input class="form-input-text" type="text" value={this.state.username} onChange={this.handleUsernameChange} />
         </label>
-        <label>
+        
+        <br className="form-br"></br>
+        
+        <label className="form-label">
           email 
-          <input type="text" value={this.state.email} onChange={this.handleEmailChange} />
+          <input class="form-input-text" type="text" value={this.state.email} onChange={this.handleEmailChange} />
         </label>
-        <label>
+        
+        <br className="form-br"></br>
+        
+        <label className="form-label">
           phone number 
-          <input type="text" value={this.state.phoneNumber} onChange={this.handlePhoneNumberChange} />
+          <input class="form-input-text" type="text" value={this.state.phoneNumber} onChange={this.handlePhoneNumberChange} />
         </label>
-        <label>
+        
+        <br className="form-br"></br>
+        
+        <label className="form-label">
           password 
-          <input type="password" value={this.state.password} onChange={this.handlePasswordChange} />
+          <input class="form-input-text" type="password" value={this.state.password} onChange={this.handlePasswordChange} />
         </label>
-        <label>
+        
+        <br className="form-br"></br>
+        
+        <label className="form-label">
           confirm password 
-          <input type="password" value={this.state.confirmPassword}
+          <input class="form-input-text" type="password" value={this.state.confirmPassword}
             onChange={this.handleConfirmPasswordChange} 
           />
         </label>
-        <input type="submit" value="register" />
+        
+        <br className="form-br"></br>
+        
+        <input class="form-input-but" type="submit" value="register" />
+        
+        <br className="form-br"></br>
+        
         <span>{this.state.errorMessage}</span>
       </form>
     );

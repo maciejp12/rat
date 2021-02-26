@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import '../Form.css';
 
 
 class LoginForm extends Component {
@@ -36,16 +37,19 @@ class LoginForm extends Component {
 
   render() {
     return (
-      <form onSubmit={e => this.props.handleLogin(e, this.state)}>
-        <label>
+      <form className="form-container" onSubmit={e => this.props.handleLogin(e, this.state)}>
+        <label className="form-label">
           username
-          <input id="username" name="username" value={this.state.username} onChange={this.handleUsernameChange} />
+          <input className="form-input-text" id="username" name="username" value={this.state.username} onChange={this.handleUsernameChange} />
         </label>
-        <label>
+        <br className="form-br"></br>
+        <label className="form-label">
           password
-          <input type="password" name="password" value={this.state.password} onChange={this.handlePasswordChange} />
+          <input className="form-input-text" type="password" name="password" value={this.state.password} onChange={this.handlePasswordChange} />
         </label>
-        <input type="submit" value="login" />
+        <br className="form-br"></br>
+        <input className="form-input-but" type="submit" value="login" />
+        <br className="form-br"></br>
         <span>{this.state.errorMessage}</span>
       </form>
     );
