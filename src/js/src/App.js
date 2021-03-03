@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { registerUser, login , auth , addOffer } from './client';
+import { registerUser, login , auth , addOffer , uploadOfferImage } from './client';
 import OfferForm from './component/OfferForm';
 import RegisterForm from './component/RegisterForm';
 import LoginForm from './component/LoginForm';
@@ -128,6 +128,14 @@ class App extends Component {
         }
 
         res.json().then(json => {
+          console.log(json);
+          //console.log(this.offerForm.current.state);
+          let img = this.offerForm.current.state.image;
+          if (img !== '') {
+            uploadOfferImage(json.id, img, localStorage.getItem('token'), 
+                             localStorage.getItem('token-type'));
+          }
+
           this.offerForm.current.setErrorMessage('');
           window.location.href = '/';
         })
@@ -141,8 +149,13 @@ class App extends Component {
       <div className="navbar">
         
         <div className="nav-action">
+          
+          <Link className="nav-action-link" to="/">
+            <p>Home</p>
+          </Link>
+        
           <Link className="nav-action-link" to="/newoffer">
-            <p>new offer</p>
+            <p>New offer</p>
           </Link>
         </div>
         
@@ -161,6 +174,10 @@ class App extends Component {
       : 
       <div className="navbar">
         <div className="nav-action">
+          
+          <Link className="nav-action-link" to="/">
+            <p>Home</p>
+          </Link>
         
         </div>
 

@@ -8,7 +8,8 @@ class OfferForm extends Component {
       title: '',
       description: '',
       errorMessage: '',
-      price: ''
+      price: '',
+      image: ''
     }
 
     this.setErrorMessage = this.setErrorMessage.bind(this);
@@ -16,6 +17,7 @@ class OfferForm extends Component {
     this.handleTitleChange = this.handleTitleChange.bind(this);
     this.handleDescriptionChange = this.handleDescriptionChange.bind(this);
     this.handlePriceChange = this.handlePriceChange.bind(this);
+    this.handleImageChange = this.handleImageChange.bind(this);
   }
 
   setErrorMessage(message) {
@@ -46,7 +48,12 @@ class OfferForm extends Component {
     this.setState({
       price: event.target.value.replace(',', '.')
     });
-    console.log(this.state.price);
+  }
+
+  handleImageChange(event) {
+    this.setState({
+      image: event.target.files[0]
+    });
   }
 
   render() {
@@ -68,6 +75,11 @@ class OfferForm extends Component {
           <input type="text" value={this.state.price} onChange={this.handlePriceChange} />
         </label>
 
+        <label>
+          image
+          <input type="file" onChange={this.handleImageChange} />
+        </label>
+        
         <input type="submit" value="add" />
 
         <span>{this.state.errorMessage}</span>

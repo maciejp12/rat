@@ -60,6 +60,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .authorizeRequests()
                     .antMatchers(HttpMethod.POST, "/api/offer").authenticated()
+                    .antMatchers(HttpMethod.POST, "api/offer/image/{id}").authenticated()
                     .antMatchers(HttpMethod.DELETE, "/api/offer/delete/{id}").authenticated()
                     .anyRequest().permitAll()
                 .and()

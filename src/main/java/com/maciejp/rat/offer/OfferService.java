@@ -2,11 +2,17 @@ package com.maciejp.rat.offer;
 
 import com.maciejp.rat.exception.ApiException;
 import com.maciejp.rat.user.UserService;
+import org.apache.tomcat.util.codec.binary.Base64;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 public class OfferService {
@@ -173,5 +179,40 @@ public class OfferService {
         toUpdate = getOfferById(id);
 
         return toUpdate;
+    }
+
+    public void addOfferImage(OfferImageRequest image, long id, String userName) {
+
+        if (!offerIdExists(id)) {
+            return;
+        }
+
+        Offer offer = getOfferById(id);
+
+        if (offer == null) {
+            return;
+        }
+
+        if (!offer.getCreator().equals(userName)) {
+            return;
+        }
+
+        System.out.println(image.getFileType());
+        String extension = "";
+
+        if (image.getFileType().equals("image/jpeg")) {
+            extension = ".jpeg";
+        } else if (image.getFileType().equals("image/png")) {
+            extension = ".png";
+        }
+
+        String filename = UUID.randomUUID().toString() + "_" + String.valueOf(id);
+        byte[] data = Base64.decodeBase64(image.getEncodedFile());
+
+        try (OutputStream stream = new FileOutputStream(filename + extension)) {
+            stream.write(data);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

@@ -1,4 +1,5 @@
 const offerUrl = 'http://127.0.0.1:8080/api/offer';
+const offerImageUrl = 'http://127.0.0.1:8080/api/offer/image';
 const offerDeleteUrl = 'http://127.0.0.1:8080/api/offer/delete';
 const offerUpdateUrl = 'http://127.0.0.1:8080/api/offer/update';
 const userOfferUrl = 'http://127.0.0.1:8080/api/offer/creator';
@@ -112,6 +113,33 @@ export const addOffer = (data, token, type) => {
     })
   });
 }
+
+
+export const uploadOfferImage = (id, file, token, type) => {
+  const reader = new FileReader();
+  let fileType = file.type;
+
+  reader.onloadend = () => {
+    const base64String = reader.result
+      .replace("data:", "")
+      .replace(/^.+,/, "");
+
+    fetch(offerImageUrl + '/' + id, {
+        headers: {
+          'Authorization': type + ' ' + token,
+          'Content-Type': 'application/json'
+        },
+        method: 'POST',
+        body: JSON.stringify({
+          file: base64String,
+          filetype: fileType
+        })
+    })
+  }
+
+  reader.readAsDataURL(file);
+}
+
 
 export const registerUser = (username, email, phoneNumber, password) => {
   return fetch(userUrl, {
