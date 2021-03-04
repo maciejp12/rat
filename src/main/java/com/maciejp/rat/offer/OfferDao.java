@@ -204,7 +204,16 @@ public class OfferDao {
     }
 
     public void insertOfferImage(long id, String filename, String type) {
-        String sql = "";
+        String sql = "" +
+                "INSERT INTO offer_image(offer_image_id, image_file_name, offer_id, image_type) " +
+                "VALUES (DEFAULT, ?, ?, ?)";
+
+        jdbcTemplate.update(
+                sql,
+                filename,
+                id,
+                type
+        );
     }
 
     private RowMapper<Offer> mapOffer() {

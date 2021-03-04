@@ -206,14 +206,16 @@ public class OfferService {
         }
 
         String offerImagePath = "images/offer/";
-
         String filename = UUID.randomUUID().toString() + "_" + String.valueOf(id);
+
         byte[] data = Base64.decodeBase64(image.getEncodedFile());
 
         try (OutputStream stream = new FileOutputStream(offerImagePath + filename + extension)) {
             stream.write(data);
         } catch (Exception e) {
-            e.printStackTrace();
+            return;
         }
+
+        offerDao.insertOfferImage(id, filename, extension);
     }
 }
