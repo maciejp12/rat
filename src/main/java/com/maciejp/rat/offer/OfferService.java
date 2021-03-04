@@ -197,7 +197,6 @@ public class OfferService {
             return;
         }
 
-        System.out.println(image.getFileType());
         String extension = "";
 
         if (image.getFileType().equals("image/jpeg")) {
@@ -206,10 +205,12 @@ public class OfferService {
             extension = ".png";
         }
 
+        String offerImagePath = "images/offer/";
+
         String filename = UUID.randomUUID().toString() + "_" + String.valueOf(id);
         byte[] data = Base64.decodeBase64(image.getEncodedFile());
 
-        try (OutputStream stream = new FileOutputStream(filename + extension)) {
+        try (OutputStream stream = new FileOutputStream(offerImagePath + filename + extension)) {
             stream.write(data);
         } catch (Exception e) {
             e.printStackTrace();

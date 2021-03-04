@@ -203,6 +203,10 @@ public class OfferDao {
         );
     }
 
+    public void insertOfferImage(long id, String filename, String type) {
+        String sql = "";
+    }
+
     private RowMapper<Offer> mapOffer() {
         return (resultSet, i) -> {
             long id = resultSet.getLong("offer_id");
