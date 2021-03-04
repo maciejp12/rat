@@ -5,6 +5,7 @@ target/
 !**/src/test/**/target/
 
 images/offer/*
+!images/offer/.gitkeep
 
 ### STS ###
 .apt_generated
