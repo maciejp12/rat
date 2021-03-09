@@ -251,7 +251,6 @@ public class OfferService {
     private static String encodeFileToBase64(String fileName) throws IOException {
         File file = new File(fileName);
         byte fileData[] = Files.readAllBytes(file.toPath());
-        String result = Base64.encodeBase64String(fileData);
-        return result;
+        return Base64.encodeBase64String(fileData);
     }
 }
