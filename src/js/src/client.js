@@ -141,6 +141,17 @@ export const uploadOfferImage = (id, file, token, type) => {
 }
 
 
+export const getOfferImagesById = (id) => {
+  return fetch(offerImageUrl + '/' + id, {
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json'
+    },
+    method: 'GET'
+  })
+}
+
+
 export const registerUser = (username, email, phoneNumber, password) => {
   return fetch(userUrl, {
     headers: {

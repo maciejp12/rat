@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { getOfferById , deleteOfferById , updateOfferById , auth, addOfferVisit , addOfferVisitAuth} from '../client';
+import { getOfferById , deleteOfferById , updateOfferById , auth, addOfferVisit , addOfferVisitAuth, getOfferImagesById } from '../client';
 
 
 class OfferView extends Component {
@@ -26,6 +26,8 @@ class OfferView extends Component {
       priceUpdate: '',
       errorMessage: '',
       visits: '',
+
+      imageList: []
     }
 
     this.deleteOffer = this.deleteOffer.bind(this);
@@ -60,6 +62,7 @@ class OfferView extends Component {
         });
     }
     this.getOfferDetails();
+    this.getOfferImages();
   }
 
   getOfferDetails() {
@@ -101,7 +104,6 @@ class OfferView extends Component {
                 }
     
                 res.json().then(json => {
-                  console.log(json);
                   this.setState({
                     visits: json.visits,
                     isFetching: false
@@ -152,6 +154,32 @@ class OfferView extends Component {
 
         res.json().then(json => {
           window.location.href = '/';
+        })
+      });
+  }
+
+  getOfferImages() {
+    getOfferImagesById(this.state.id)
+      .then(res => {
+        if (!res.ok) {
+          return;
+        }
+
+        res.json().then(json => {
+          let images = [];
+          
+          for (let i in json) {
+            images.push({
+              order: i,
+              file: json[i].file,
+              fileType: json[i].fileType
+            });
+          }
+
+          this.setState({
+            imageList: images
+          });
+
         })
       });
   }
@@ -422,8 +450,25 @@ class OfferView extends Component {
         <p>visits = {this.state.visits}</p>
       </div>
 
+    let imageContainer = 
+      <div>
+        <img src="/no_image_tmp.png" alt="no img found"></img>
+      </div>
+
+    if (this.state.imageList.length) {
+      imageContainer =
+        <div>
+          {this.state.imageList.map(image => 
+            <div key={image.order}>
+              <img src={'data:' + image.fileType + ';base64,' + image.file} alt="no img found"></img>
+            </div>
+          )}
+        </div>
+    }
+
     return (
       <div>
+        {imageContainer}
         {offerDetails}
         {isOwner && 
           <div>
