@@ -1,15 +1,15 @@
-package com.maciejp.rat.offer;
+package com.maciejp.rat.offer.image;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class OfferImageRequest {
+public class OfferImage {
 
     private String encodedFile;
 
     private String fileType;
 
-    public OfferImageRequest(@JsonProperty("file") String encodedFile,
-                             @JsonProperty("filetype") String fileType) {
+    public OfferImage(@JsonProperty("file") String encodedFile,
+                      @JsonProperty("filetype") String fileType) {
         this.encodedFile = encodedFile;
         this.fileType = fileType;
     }

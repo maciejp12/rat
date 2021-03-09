@@ -1,16 +1,17 @@
 package com.maciejp.rat.offer;
 
 import com.maciejp.rat.exception.ApiException;
+import com.maciejp.rat.offer.image.OfferImage;
+import com.maciejp.rat.offer.image.OfferImageFileData;
 import com.maciejp.rat.user.UserService;
 import org.apache.tomcat.util.codec.binary.Base64;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
+import java.io.*;
+import java.nio.file.Files;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -181,7 +182,7 @@ public class OfferService {
         return toUpdate;
     }
 
-    public void addOfferImage(OfferImageRequest image, long id, String userName) {
+    public void addOfferImage(OfferImage image, long id, String userName) {
 
         if (!offerIdExists(id)) {
             return;
@@ -217,5 +218,40 @@ public class OfferService {
         }
 
         offerDao.insertOfferImage(id, filename, extension);
+    }
+
+    public List<OfferImage> getOfferImagesById(long id) {
+        List<OfferImageFileData> fileNames = offerDao.selectOfferImages(id);
+        List<OfferImage> encodedImages = new ArrayList<>();
+
+        String offerImagePath = "images/offer/";
+
+        for (OfferImageFileData file : fileNames) {
+            try {
+                String path = file.getFullFileName();
+                String encoded = encodeFileToBase64(offerImagePath + path);
+
+                String extension = file.getImageType();
+
+                if (extension.equals(".jpeg")) {
+                    extension = "image/jpeg";
+                } else if (extension.equals(".png")) {
+                    extension = "image/png";
+                }
+
+                encodedImages.add(new OfferImage(encoded, extension));
+            } catch (IOException e) {
+
+            }
+        }
+
+        return encodedImages;
+    }
+
+    private static String encodeFileToBase64(String fileName) throws IOException {
+        File file = new File(fileName);
+        byte fileData[] = Files.readAllBytes(file.toPath());
+        String result = Base64.encodeBase64String(fileData);
+        return result;
     }
 }

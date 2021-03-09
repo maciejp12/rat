@@ -1,6 +1,7 @@
 package com.maciejp.rat.offer;
 
 import com.maciejp.rat.exception.ApiException;
+import com.maciejp.rat.offer.image.OfferImage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
@@ -131,7 +132,7 @@ public class OfferController {
     }
 
     @PostMapping("/image/{id}")
-    public void addOfferImage(@PathVariable("id") long id, @RequestBody OfferImageRequest image) {
+    public void addOfferImage(@PathVariable("id") long id, @RequestBody OfferImage image) {
 
         if (image == null) {
             return;
@@ -143,7 +144,14 @@ public class OfferController {
         } catch (ApiException e) {
             return;
         }
+    }
 
+    @GetMapping("/image/{id}")
+    public ResponseEntity<List<OfferImage>> getOfferImagesById(@PathVariable("id") long id) {
+        List<OfferImage> offerImages = offerService.getOfferImagesById(id);
+        return ResponseEntity
+                .ok()
+                .body(offerImages);
     }
 
     @DeleteMapping("/delete/{id}")

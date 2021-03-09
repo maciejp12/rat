@@ -1,5 +1,6 @@
 package com.maciejp.rat.offer;
 
+import com.maciejp.rat.offer.image.OfferImageFileData;
 import com.maciejp.rat.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -216,6 +217,20 @@ public class OfferDao {
         );
     }
 
+
+    public List<OfferImageFileData> selectOfferImages(long id) {
+        String sql = "" +
+                "SELECT image_file_name, image_type " +
+                "FROM offer_image " +
+                "WHERE offer_id = ?";
+
+        return jdbcTemplate.query(
+                sql,
+                mapOfferImageFile(),
+                id
+        );
+    }
+
     private RowMapper<Offer> mapOffer() {
         return (resultSet, i) -> {
             long id = resultSet.getLong("offer_id");
@@ -229,4 +244,12 @@ public class OfferDao {
         };
     }
 
+    private RowMapper<OfferImageFileData> mapOfferImageFile() {
+        return (resultSet, i) -> {
+            String fileName = resultSet.getString("image_file_name");
+            String imageType = resultSet.getString("image_type");
+
+            return new OfferImageFileData(fileName, imageType);
+        };
+    }
 }
