@@ -172,10 +172,10 @@ class OfferView extends Component {
             images.push({
               order: i,
               file: json[i].file,
-              fileType: json[i].fileType
+              fileType: json[i].filetype
             });
           }
-
+          
           this.setState({
             imageList: images
           });
